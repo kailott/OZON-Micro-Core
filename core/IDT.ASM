@@ -1,0 +1,35 @@
+;Таблица векторов прерываний
+;Находится в секции .code для правильной линковки
+IDT:
+_int0  IDT_Unit EXCEPTION.INT_0,8,0x8F
+_int1  IDT_Unit EXCEPTION.INT_1,8,0x8F
+_int2  IDT_Unit EXCEPTION.INT_2,8,0x8F
+_int3  IDT_Unit EXCEPTION.INT_3,8,0x8F
+_int4  IDT_Unit EXCEPTION.INT_4,8,0x8F
+_int5  IDT_Unit EXCEPTION.INT_5,8,0x8F
+_int6  IDT_Unit EXCEPTION.INT_6,8,0x8F
+_int7  IDT_Unit EXCEPTION.INT_7,8,0x8F
+_int8  IDT_Unit EXCEPTION.INT_8,8,0x8F
+_int9  IDT_Unit EXCEPTION.INT_9,8,0x8F
+_int10 IDT_Unit EXCEPTION.INT_10,8,0x8F
+_int11 IDT_Unit EXCEPTION.INT_11,8,0x8F
+_int12 IDT_Unit EXCEPTION.INT_12,8,0x8F
+_int13 IDT_Unit EXCEPTION.INT_13,8,0x8F
+_int14 IDT_Unit EXCEPTION.INT_14,8,0x8F
+_int15 IDT_Unit EXCEPTION.INT_15,8,0x8F
+_int16 IDT_Unit EXCEPTION.INT_16,8,0x8F
+_int17 IDT_Unit EXCEPTION.INT_17,8,0x8F
+_space db (IDT+(0x8*0x20))-$ dup (0)
+_int32 IDT_Unit IRQ.IRQ_0,8,0x8F
+_int33 IDT_Unit IRQ.IRQ_1,8,0x8F
+_int34 IDT_Unit IRQ.IRQ_2,8,0x8F
+_int35 IDT_Unit IRQ.IRQ_3,8,0x8F
+_int36 IDT_Unit IRQ.IRQ_4,8,0x8F
+_int37 IDT_Unit IRQ.IRQ_5,8,0x8F
+_int38 IDT_Unit IRQ.IRQ_6,8,0x8F
+_int39 IDT_Unit IRQ.IRQ_7,8,0x8F
+_int40 IDT_Unit IRQ.IRQ_8,8,0x8F
+_int41 IDT_Unit IRQ.IRQ_12,8,0x8F
+IDTR:
+.size dw $-IDT-1
+.base dd IDT
