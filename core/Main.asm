@@ -1,6 +1,9 @@
+;Ozon Micro Core
+;Author Kailot2
+;GPL V2.0 2015
 format ELF
 section '.text' writeable executable
-org 0x400000
+org 0x800000
 include 'struct.inc'  ;/ Используемые структуры и определения типа virtual
 include 'APIC_DEFS.inc' ;/Определения для работы с APIC
 include 'macro/proc32.inc' ;/ Определения стандартных вызовов
@@ -65,9 +68,10 @@ mov dword [IOAPIC_IOWIN_REG_DEF], ebx
 mov dword [IOAPIC_IOREGSEL_REG_DEF], IOAPIC_IOREDTBL1_low
 mov dword [IOAPIC_IOWIN_REG_DEF], 21h
 
-sti ;
+;sti ;
+
 ;Теперь нужно инициализировать менеджер виртуальной памяти
-;ccall [oxygen.init] ;//Инициализация менеджера виртуальной памяти
+;ccall [ext.init] ;//Инициализация менеджера виртуальной памяти
 ;mov edx,cr3
 ;call __outhex
 ;call __ln
@@ -83,25 +87,39 @@ sti ;
 ;mov cr0,eax
 
 
-;mov esi,PAGING_SET
-;call __printf	 ;Строку
-
-
-
-
+;Теперь сделаем alloc фреймбуфера
+;Куда нибудь в район 4 мегабайта
+;Go
+;Каталог страниц размещается по адресу 0x0 (теперь)
+;Высчитаем индекс в каталоге
+call Atom.init
+ccall Reloc,0xB8000,0x400000
+;mov eax,0x400000
+;shr eax,20
+;and eax,0xFFC
+;Индекс в каталоге и является адресом табличной записи
+;Нужно выделить память под каталог страниц =)
+;push eax
+;call Physical_Memory.Get_Free
+;И записать его в каталог
+;pop esi
+;push eax
+;or eax,0x10B	 ;Атрибут
+;mov [esi],eax
+;;Теперь по индексу высчитаем адрес содержимого страницы
+;Для этого индекс нужно умножить на 1024
+;shl esi, 0xA	   ; =)
+;;И первым эллементов впишем туда фреймбуфер
+;mov [esi],dword 0xB8000 or 0x10B
+;Теперь поменяем CurPos на 0x400000
+;И попробуем что нибудь вывести
+mov [CurPos],0x400000
+mov esi,PAGING_SET
+call __printf
 
 jmp $
-;PAGING_SET db 'PG activity',0
 
-
-;extrn init
-;oxygen.init dd init
-
-
-
-
-
-
+PAGING_SET db 'PG activity',0
 
 
 ;Если ядро загруженно несовместимым загрузчиком
@@ -122,6 +140,10 @@ cli
 ;Включаем текстовый режим
 push eax
 ;mov dx,0x3C0
+mov eax,cr0
+xor eax,0x80000000
+mov cr0,eax
+mov [CurPos],0xB8000
 ;mov al,0x10 or 0100000b
 ;out dx,al
 ;inc dx
@@ -227,6 +249,7 @@ TextColor db 0xA
 
 include 'INTXX.asm'	;/Обработка прерывания
 include 'RAM.asm'
+include 'Atom.asm'
 
 
 
