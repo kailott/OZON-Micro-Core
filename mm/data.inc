@@ -1,0 +1,1 @@
+_static_memory_pointer dq _mm_heap

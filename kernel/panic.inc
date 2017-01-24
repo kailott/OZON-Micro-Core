@@ -1,11 +1,11 @@
 ;Critical error code Ozon OS Core
 panic:
-cmp eax,BAD_IMAGE_ADDRESS
+;cmp eax,BAD_IMAGE_ADDRESS
 jne @f
 mov rsi,rbp
 mov rax,rbp
-add rax,uart.print - MAIN_ENTRY
-mov rsi,S_BAD_IMAGE_ADDRESS - MAIN_ENTRY
+;add rax,uart.print - MAIN_ENTRY
+;mov rsi,S_BAD_IMAGE_ADDRESS - MAIN_ENTRY
 call rax
 jmp $
 @@:

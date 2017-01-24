@@ -1,17 +1,11 @@
 ;OZON OS kernel initialization
 init:
-call @f
-@@:
-pop rax
-sub rax,(@b-init) ;Calculation of the true load address
-mov rbp,rax
-and rax,0xFFFF	  ;Is the address not 4k aligned?
-jz @f
-mov rbx,rbp
-add rbx,panic - MAIN_ENTRY
-mov rax,BAD_IMAGE_ADDRESS
-call rbx
-@@:
+
+;Ok , address corected.
+;Setup page translation
+;It is assumed corresponding
+;to the logical address physical
+;Get PML4
 
 
 
